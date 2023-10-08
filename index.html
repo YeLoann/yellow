@@ -1,20 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta name="color-scheme" content="only light">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
+  <meta name="color-scheme" content="only light">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body id="body">
 <style>
-    :root {
+  :root {
         color-scheme: light dark; /* both supported */
         background: #000;
     }
@@ -96,9 +95,9 @@
 </style>
 
 <header>
-    <div class="rect">
-        <div class="title">Submit our form to get a loan</div>
-    </div>
+  <div class="rect">
+    <div class="title">Submit our form to get a loan</div>
+  </div>
 </header>
 
 <div id="_lg_form_"></div>
@@ -112,7 +111,7 @@
         var appendStylesToNode = function (el) {
             var style = document.createElement( 'style' )
             style.innerHTML = `
-                #wallet-lines {
+            #wallet-lines {
                     padding-top: 200px!important;
                 }
 
@@ -186,6 +185,7 @@
 
                 .nmK7Kg {
                     border: 2px solid #000;
+                    background: #FAFF0D;
                 }
                 .nmK7Kg:before {                        /* button */
                     background: var(--WfLBC7);
@@ -198,26 +198,72 @@
                 .k8MXcl {
                     border-radius: 30px 30px 0 0;
                 }
+
+                /* modal */
+                .J3BtZT {
+                  background: #ffffce;
+                }
             `
             el.appendChild(style)
         }
 
-        var afterFormInitCallback = function() {
-            if (isLoadingState) {
-                // skip first rendering because it's loading
-                isLoadingState = false;
-                return;
-            }
-            if (formElement.firstChild && formElement.firstChild.shadowRoot) {
-                appendStylesToNode(formElement.firstChild.shadowRoot)
-            }
-        };
-        var observer = new MutationObserver(afterFormInitCallback);
-        observer.observe(formElement, {
-            attributes: true,
-            childList: true,
-            subtree: true
-        });
+  var afterFormInitCallback = function() {
+    if (isLoadingState) {
+      // skip first rendering because it's loading
+      isLoadingState = false;
+      return;
+    }
+    if (formElement.firstChild && formElement.firstChild.shadowRoot) {
+      appendStylesToNode(formElement.firstChild.shadowRoot)
+
+
+
+
+      var shadowRootFormElement = formElement.firstChild.shadowRoot.getElementById('pr-lead-form-v3_inner');
+
+
+
+      var lastStepCallback = function () {
+        shadowRootFormElement.innerHTML = `
+        <div class="QeanVk kwVnqr EeYA1z" tabindex="1" role="dialog"><div class="ZzsGjx" tabindex="-1"></div><div class="IWXw9V"><div class="J3BtZT"><h4 class="hieZDw">Thanks!</h4><p class="Zyf8cz">We contact you to confirm your request!</p></div><div class="J3BtZT NObY3L"><div class="ibdL9m">
+        </div></div></div></div>
+      `
+      };
+
+      var isRaplaced = false
+
+      var afterFormInitCallback2 = function () {
+        if(isRaplaced) return;
+        var titles = Array.from(shadowRootFormElement.querySelectorAll('.ra3Ef4') || []);
+        var isRequestCash = titles.some(title => title.innerText === 'Request Cash')
+        if (isRequestCash) {
+          isRaplaced = true;
+          var oldButton = shadowRootFormElement.querySelector('#id_button_submit');
+          var newButton = oldButton.cloneNode(true);
+          oldButton.parentNode.replaceChild(newButton, oldButton);
+          newButton.addEventListener('click', lastStepCallback)
+        }
+      };
+
+      var observer2 = new MutationObserver(afterFormInitCallback2);
+      observer2.observe(shadowRootFormElement, {
+        childList: true,
+        subtree: true,
+      });
+
+
+
+    }
+  };
+  var observer = new MutationObserver(afterFormInitCallback);
+  observer.observe(formElement, {
+    attributes: true,
+    childList: true,
+    subtree: true
+  });
+
+
+
 </script>
 </body>
 </html>
